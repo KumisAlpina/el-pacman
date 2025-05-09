@@ -4,3 +4,4 @@ SALMON = (227, 61, 53)
 ROJO = (165, 8, 0)
 NEGRO = (0, 0, 0)
 AMARILLO = (229, 216, 24)
+"""colores nivel"""
