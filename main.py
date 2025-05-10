@@ -2,6 +2,7 @@ import pygame
 import constantes
 import sys
 from button import Button
+from game import Game
 
 pygame.init()
 
@@ -31,16 +32,21 @@ def play():
         PLAY_BACK.changeColor(PLAY_MOUSE_POS)
         PLAY_BACK.update(ventana)
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if PLAY_BACK.checkForInput(PLAY_MOUSE_POS):
-                    main_menu()
+        try:
+            #iniciar pygame
+            pygame.init()
 
-        pygame.display.update()
-        fps.tick(60)
+            #crear el juego
+            game = Game()
+            game.run()
+        except Exception as e:
+            print(f"Error: {e}")
+            sys.exit(1)
+        finally:
+            #cerrar pygame
+            pygame.quit()
+            sys.exit()
+
 
 def options():
     run = True
