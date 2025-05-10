@@ -85,9 +85,9 @@ def main_menu():
     while run:
         MENU_MOUSE_POS = pygame.mouse.get_pos()
 
-        # Primero dibujamos la imagen
+        
         ventana.blit(titulo_imagen, titulo_rect)
-        # Luego dibujamos el texto sobre la imagen
+        
         ventana.blit(MENU_TEXT, MENU_RECT)
 
         PLAY_BUTTON = Button(pos=(ancho//2, 410),
