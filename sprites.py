@@ -83,25 +83,34 @@ class Player:
             
 
     def move(self, walls):
-        #guardar pocicion anterior
-        old_x = self.x
-        old_y = self.y
-
-        #actualizar pocicion
-        self.x += self.dx
-        self.y += self.dy
-
-        #actualizar el rectangulo
+        """Mover a el jugador segun la entrada del usuario"""
+        #intentar mov en x
+        if self.dx != 0:
+            #comprobar colicion en x
+            if not self.check_collision(walls, self.dx, 0):
+                self.x += self.dx
+            else:
+                #intentar deslizarse verticalmente si hay colicion
+                if self.check_collision(walls, self.dx, -SLIDE_SPEED):
+                    if not self.check_collision(walls, self.dx, SLIDE_SPEED):
+                        self.y += SLIDE_SPEED
+                    else:
+                        self.y -= SLIDE_SPEED
+        #intentar movimiento en y
+        if self.dy != 0:
+            #comprobar colicion en y
+            if not self.check_collision(walls, 0, self.dy):
+                self.y += self.dy
+            else:
+                #intentar deslizarse horizontalmente si hay colicion
+                if self.check_collision(walls, -SLIDE_SPEED, self.dy):
+                    if not self.check_collision(walls, SLIDE_SPEED, self.dy):
+                        self.x += SLIDE_SPEED
+                    else:
+                        self.x -= SLIDE_SPEED
+        #actualizar el rectangulo a la nueva posicion
         self.rect.center = (self.x, self.y)
 
-        #comprobar coliciones con las paredes
-        for wall in walls:
-            if self.rect.colliderect(wall.rect):
-            #si hay colicion volver a la pocicion anterior
-                self.x = old_x
-                self.y = old_y
-                self.rect.center = (self.x, self.y)
-                break
 
         #Mantener el jugador dentro de la pantalla
         if self.x > SCREEN_WIDTH - PLAYER_SIZE:
@@ -137,6 +146,19 @@ class Player:
 
         #actualizar estado del movimiento
         self.is_moving = self.dx != 0 or self.dy != 0
+
+    def check_collision(self, walls, dx=0, dy=0):
+        """COMPROBAR SI HAY UNA COLISION"""
+        #Crear un rectangulo temporal en una posicion futura
+        future_react = self.rect.copy()
+        future_react.x += dx
+        future_react.y += dy
+
+        #comprobar si hay colisiones con la pared
+        for wall in walls:
+            if future_react.colliderect(wall.rect):
+                return True
+        return False
 
     def update(self, walls):
         self.handle_input()
