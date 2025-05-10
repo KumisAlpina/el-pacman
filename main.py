@@ -25,7 +25,7 @@ def play():
         PLAY_RECT = PLAY_TEXT.get_rect(center=(ancho//2, 260))
         ventana.blit(PLAY_TEXT, PLAY_RECT)
 
-        PLAY_BACK = Button(image=None, pos=(ancho//2, 460),
+        PLAY_BACK = Button(pos=(ancho//2, 460),
                           text_input="VOLVER", font=get_font(75), base_color="White", hovering_color="Green")
 
         PLAY_BACK.changeColor(PLAY_MOUSE_POS)
@@ -52,7 +52,7 @@ def options():
         OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(ancho//2, 260))
         ventana.blit(OPTIONS_TEXT, OPTIONS_RECT)
 
-        OPTIONS_BACK = Button(image=None, pos=(ancho//2, 460),
+        OPTIONS_BACK = Button(pos=(ancho//2, 460),
                             text_input="VOLVER", font=get_font(75), base_color="Black", hovering_color="Green")
 
         OPTIONS_BACK.changeColor(OPTIONS_MOUSE_POS)
@@ -70,23 +70,32 @@ def options():
         fps.tick(60)
 
 def main_menu():
-    fondo = pygame.image.load("assets/Background.png").convert()
+    # Cargar la imagen del título
+    titulo_imagen = pygame.image.load("assets/Titulo.jpg").convert_alpha()
+    # Escalar la imagen si es necesario
+    titulo_imagen = pygame.transform.scale(titulo_imagen, (600, 150))
+    titulo_rect = titulo_imagen.get_rect(center=(ancho//2, 200))
+
+    # Crear el texto PAC-MAN
+    MENU_TEXT = get_font(75).render("PAC-MAN", True, constantes.AMARILLO)
+    MENU_RECT = MENU_TEXT.get_rect(center=(ancho//2, 200))  # Misma posición que la imagen
+
+    ventana.fill("black")
     run = True
     while run:
-        ventana.blit(fondo, [0, 0])
         MENU_MOUSE_POS = pygame.mouse.get_pos()
 
-        MENU_TEXT = get_font(100).render("PAC-MAN", True, "#b68f40")
-        MENU_RECT = MENU_TEXT.get_rect(center=(ancho//2, 100))
-
-        PLAY_BUTTON = Button(image=pygame.image.load("assets/fondotrans.png"), pos=(ancho//2, 250),
-                            text_input="JUGAR", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
-        OPTIONS_BUTTON = Button(image=pygame.image.load("assets/fondotrans.png"), pos=(ancho//2, 400),
-                            text_input="CONTROLES", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
-        QUIT_BUTTON = Button(image=pygame.image.load("assets/fondotrans.png"), pos=(ancho//2, 550),
-                            text_input="SALIR", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
-
+        # Primero dibujamos la imagen
+        ventana.blit(titulo_imagen, titulo_rect)
+        # Luego dibujamos el texto sobre la imagen
         ventana.blit(MENU_TEXT, MENU_RECT)
+
+        PLAY_BUTTON = Button(pos=(ancho//2, 410),
+                            text_input="JUGAR", font=get_font(35), base_color="#d7fcd4", hovering_color="White")
+        OPTIONS_BUTTON = Button(pos=(ancho//2, 480),
+                            text_input="CONTROLES", font=get_font(35), base_color="#d7fcd4", hovering_color="White")
+        QUIT_BUTTON = Button(pos=(ancho//2, 550),
+                            text_input="SALIR", font=get_font(35), base_color="#d7fcd4", hovering_color="White")
 
         for button in [PLAY_BUTTON, OPTIONS_BUTTON, QUIT_BUTTON]:
             button.changeColor(MENU_MOUSE_POS)
