@@ -11,12 +11,19 @@ class Player:
         self.sprite_sheet = load_image("pacman.png")
 
         #obtener imagen de pacman
-        self.image = pygame.Surface((16, 16), pygame.SRCALPHA)
-        self.image.blit(self.sprite_sheet, (0, 0), (0, 0, 16, 16))
-        self.image = pygame.transform.scale(self.image, (PLAYER_SIZE, PLAYER_SIZE))
+        self.origin_image = pygame.Surface((16, 16), pygame.SRCALPHA)
+        self.origin_image.blit(self.sprite_sheet, (0, 0), (0, 0, 16, 16))
+        self.origin_image = pygame.transform.scale(self.origin_image, (PLAYER_SIZE, PLAYER_SIZE))
+
+        #imagen actual del jugador
+        self.image = self.origin_image
 
         #crear rectangulo para coliciones y posicionamiento
         self.rect = self.image.get_rect(center=(self.x, self.y))
+
+        #Direccion actual(0: derecha, 1: izquierda)
+        self.direction = 0
+        self.flipped = False
 
     
     def move(self, dx, dy):
@@ -37,6 +44,19 @@ class Player:
         
         #actualizar el rectangulo
         self.rect.center = (self.x, self.y)
+
+        #actualizar la direccion
+        if dx > 0 and self.direction != 0:
+            self.direction = 0 #derecha
+            self.image = self.origin_image
+            self.flipped = False
+
+        elif dx < 0 and self.direction != 1:
+            self.direction = 1 #izquierda
+            self.image = pygame.transform.flip(self.image, True, False)
+            self.flipped = True
+
+        
     
     def draw(self, screen):
         #dibujar el jugador
