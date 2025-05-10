@@ -18,7 +18,19 @@ class Game:
         self.running = True
 
         #crear el jugador
-        self.player = Player()
+        self.walls = []
+        self.player = None
+        self.create_level()
+
+    def create_level(self):
+        """Crear el nivel a partir de la matriz LEVEL"""
+        for row_index, row in enumerate(LEVEL):
+            for col_index, cell in enumerate(row):
+                if cell == "1":
+                    # Crear una pared
+                    self.walls.append(Wall(col_index, row_index))
+                elif cell == "P":
+                    self.player = Player(col_index, row_index)
 
     def handle_events(self):
         #manejar eventos
@@ -29,29 +41,24 @@ class Game:
    
     def update(self):
         #actualizar estado del juego
-        #teclas presionadas
-        keys = pygame.key.get_pressed()
-
-        #calcular movimiento en base a las teclas presionadas
-        dx = keys[pygame.K_RIGHT] - keys[pygame.K_LEFT]
-        dy = keys[pygame.K_DOWN] - keys[pygame.K_UP]
-
         #mover el jugador
-        self.player.move(dx, dy)
-
-        #actualizar el jugador
-        self.player.update()
+        self.player.update(self.walls)
 
     def draw(self):
         #dibujar en la pantalla
        
         #llenando la pantalla de color negro
         self.screen.fill(BLACK)
+
+        #dibujar paredes
+        for wall in self.walls:
+            wall.draw(self.screen)
        
         #dibujar el jugador
+        
         self.player.draw(self.screen)
-      
-      #Actualizar la pantalla
+        
+        #Actualizar la pantalla
         pygame.display.flip()
 
     def run(self):
