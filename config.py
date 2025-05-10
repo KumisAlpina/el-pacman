@@ -1,0 +1,22 @@
+import pygame
+import os
+
+#CONFIGURACIONES DE LA VENTANA
+
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
+
+#CONFIGURACIONES DEL JUGADOR
+PLAYER_SIZE = 30
+PLAYER_SPEED = 5
+
+#COLORES
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+YELLOW = (255, 255, 0)
+RED = (255, 0, 0)
+BLUE = (0, 0, 255)
+
+#FUNCION PARA CARGAR IMAGENES
+def load_image(name):
+    return pygame.image.load(os.path.join("assets", "images", name)).convert_alpha()
