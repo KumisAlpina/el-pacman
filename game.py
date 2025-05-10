@@ -39,6 +39,9 @@ class Game:
         #mover el jugador
         self.player.move(dx, dy)
 
+        #actualizar el jugador
+        self.player.update()
+
     def draw(self):
         #dibujar en la pantalla
        
