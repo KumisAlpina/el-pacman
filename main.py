@@ -19,18 +19,8 @@ def get_font(size):
 def play():
     run = True
     while run:
-        PLAY_MOUSE_POS = pygame.mouse.get_pos()
+        
         ventana.fill("black")
-
-        PLAY_TEXT = get_font(45).render("Pantalla de juego", True, "White")
-        PLAY_RECT = PLAY_TEXT.get_rect(center=(ancho//2, 260))
-        ventana.blit(PLAY_TEXT, PLAY_RECT)
-
-        PLAY_BACK = Button(pos=(ancho//2, 460),
-                          text_input="VOLVER", font=get_font(75), base_color="White", hovering_color="Green")
-
-        PLAY_BACK.changeColor(PLAY_MOUSE_POS)
-        PLAY_BACK.update(ventana)
 
         try:
             #iniciar pygame
