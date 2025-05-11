@@ -1,10 +1,7 @@
-import pygame
+import pygame, sys
 from config import *
 from sprites import *
-<<<<<<< HEAD
-=======
 from button import Button
->>>>>>> concepto
 
 class Game:
     def __init__(self):
@@ -59,17 +56,16 @@ class Game:
             #si cierra la ventana
             if event.type == pygame.QUIT:
                 self.running = False
+                pygame.quit()
+                sys.exit()
         if self.game_state == GAME_OVER:
-<<<<<<< HEAD
-            self.running = False
-=======
             self.restart()
 
 
 
     def restart(self):
         from main import main_menu
-        import sys  # Import sys for sys.exit()
+        
         
         run = True
         ancho = SCREEN_WIDTH  # Use the screen width from config
@@ -107,7 +103,6 @@ class Game:
             fps.tick(60)
 
 
->>>>>>> concepto
    
     def update(self):
         #actualizar estado del juego

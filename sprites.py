@@ -226,7 +226,7 @@ class Player:
 
         #deltas
         self.dx = 0
-        self.dy = 0 
+        self.dy = 0
 
     def update_animation(self):
         #actualizar frame de la animacion

@@ -4,10 +4,7 @@ import sys
 from button import Button
 from game import Game
 
-def main():
-    try:
-        #iniciar pygame
-        pygame.init()
+pygame.init()
 
 ancho = config.SCREEN_WIDTH
 alto = config.SCREEN_HEIGHT
@@ -111,3 +108,5 @@ def main_menu():
 
         pygame.display.update()
         fps.tick(60)
+
+main_menu()
