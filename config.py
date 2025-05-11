@@ -8,7 +8,11 @@ SCREEN_HEIGHT = 600
 
 #CONFIGURACIONES DEL JUGADOR
 PLAYER_SIZE = 23
+<<<<<<< HEAD
 PLAYER_SPEED = 3
+=======
+PLAYER_SPEED = 2
+>>>>>>> concepto
 ANIMATION_SPEED = 50
 ANIMATION_FRAMES = 8
 
@@ -83,7 +87,11 @@ LEVEL = [
     "1000010011101110010000001",
     "111101100R000000O11011111",
     "1111011011101011011011111",
+<<<<<<< HEAD
     "1000000000101000000000001",
+=======
+    "0000000000101000000000000",#########
+>>>>>>> concepto
     "1011011010101010110110101",
     "1001000010000010000010001",
     "1101101110111011011011011",
@@ -96,4 +104,8 @@ LEVEL = [
 
 #FUNCION PARA CARGAR IMAGENES
 def load_image(name):
+<<<<<<< HEAD
     return pygame.image.load(os.path.join("assets", "images", name)).convert_alpha()
+=======
+    return pygame.image.load(os.path.join("assets", name)).convert_alpha()
+>>>>>>> concepto

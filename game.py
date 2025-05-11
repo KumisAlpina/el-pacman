@@ -1,6 +1,10 @@
 import pygame
 from config import *
 from sprites import *
+<<<<<<< HEAD
+=======
+from button import Button
+>>>>>>> concepto
 
 class Game:
     def __init__(self):
@@ -56,7 +60,54 @@ class Game:
             if event.type == pygame.QUIT:
                 self.running = False
         if self.game_state == GAME_OVER:
+<<<<<<< HEAD
             self.running = False
+=======
+            self.restart()
+
+
+
+    def restart(self):
+        from main import main_menu
+        import sys  # Import sys for sys.exit()
+        
+        run = True
+        ancho = SCREEN_WIDTH  # Use the screen width from config
+        ventana = self.screen  # Use the game screen as the window
+        fps = self.clock  # Use the game clock for FPS control
+
+        def get_font(size):
+            """Helper function to get a font."""
+            return pygame.font.Font(None, size)
+
+        while run:
+            OPTIONS_MOUSE_POS = pygame.mouse.get_pos()
+            self.screen.fill("black")
+
+            OPTIONS_TEXT = get_font(75).render("GAME OVER", True, "red")
+            OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(ancho // 2, 260))
+            ventana.blit(OPTIONS_TEXT, OPTIONS_RECT)
+
+            OPTIONS_BACK = Button(pos=(ancho // 2, 460),
+                                  text_input="VOLVER", font=get_font(45), base_color="White", hovering_color="Green")
+
+            OPTIONS_BACK.changeColor(OPTIONS_MOUSE_POS)
+            OPTIONS_BACK.update(ventana)
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if OPTIONS_BACK.checkForInput(OPTIONS_MOUSE_POS):
+                        run = False  
+                        main_menu() 
+
+            pygame.display.update()
+            fps.tick(60)
+
+
+>>>>>>> concepto
    
     def update(self):
         #actualizar estado del juego
