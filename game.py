@@ -137,7 +137,7 @@ class Game:
                     self.game_state = GAME_OVER
 
         #actualizar monedas y comprobar coliciones
-        for coin in self.coins[:]: #usar una copia de la lista para modificarla
+        for coin in self.coins[:]: 
             coin.update()
             if self.player.rect.colliderect(coin.rect):
                 self.coins.remove(coin)
@@ -145,15 +145,13 @@ class Game:
                 # Pausar el sonido default
                 if self.default_channel:
                     self.default_channel.stop()
-                # Alternar entre pellet1 y pellet2
+                
                 if self.pellet_toggle:
                     self.pellet1_sound.play()
                 else:
                     self.pellet2_sound.play()
                 self.pellet_toggle = not self.pellet_toggle
-                # Esperar a que termine el sonido del pellet antes de reanudar default
-                while pygame.mixer.get_busy():
-                    pygame.time.delay(10)
+                
                 self.default_channel = self.default_sound.play(loops=-1)
 
         
