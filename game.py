@@ -3,6 +3,7 @@ from config import *
 from sprites import *
 from button import Button
 
+
 class Game:
     def __init__(self):
         #iniciar pygame
@@ -29,6 +30,15 @@ class Game:
 
         #Fuente para el texto
         self.font = pygame.font.Font(None, 36)
+
+        # Sonidos
+        self.default_sound = pygame.mixer.Sound("assets/default.wav")
+        self.pellet1_sound = pygame.mixer.Sound("assets/pellet1.wav")
+        self.pellet2_sound = pygame.mixer.Sound("assets/pellet2.wav")
+        self.levelintro_sound = pygame.mixer.Sound("assets/levelintro.wav")
+        self.death_sound = pygame.mixer.Sound("assets/death.wav")
+        self.default_channel = None
+        self.pellet_toggle = True  # Para alternar entre pellet1 y pellet2
 
     def create_level(self):
         """Crear el nivel a partir de la matriz LEVEL"""
@@ -58,49 +68,51 @@ class Game:
                 self.running = False
                 pygame.quit()
                 sys.exit()
-        if self.game_state == GAME_OVER:
-            self.restart()
+            if self.game_state == GAME_OVER:
+                 self.restart()
 
 
 
     def restart(self):
-        from main import main_menu
-        
-        
-        run = True
-        ancho = SCREEN_WIDTH  # Use the screen width from config
-        ventana = self.screen  # Use the game screen as the window
-        fps = self.clock  # Use the game clock for FPS control
+        show_restart = True
+        screen_width = SCREEN_WIDTH
+        screen = self.screen
+        clock = self.clock
 
         def get_font(size):
-            """Helper function to get a font."""
             return pygame.font.Font(None, size)
 
-        while run:
-            OPTIONS_MOUSE_POS = pygame.mouse.get_pos()
-            self.screen.fill("black")
+        while show_restart:
+            mouse_pos = pygame.mouse.get_pos()
+            screen.fill("black")
 
-            OPTIONS_TEXT = get_font(75).render("GAME OVER", True, "red")
-            OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(ancho // 2, 260))
-            ventana.blit(OPTIONS_TEXT, OPTIONS_RECT)
+            gameover_text = get_font(75).render("GAME OVER", True, "red")
+            gameover_rect = gameover_text.get_rect(center=(screen_width // 2, 260))
+            screen.blit(gameover_text, gameover_rect)
 
-            OPTIONS_BACK = Button(pos=(ancho // 2, 460),
-                                  text_input="VOLVER", font=get_font(45), base_color="White", hovering_color="Green")
+            back_button = Button(
+                pos=(screen_width // 2, 460),
+                text_input="VOLVER",
+                font=get_font(45),
+                base_color="White",
+                hovering_color="Green"
+            )
 
-            OPTIONS_BACK.changeColor(OPTIONS_MOUSE_POS)
-            OPTIONS_BACK.update(ventana)
+            back_button.changeColor(mouse_pos)
+            back_button.update(screen)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    if OPTIONS_BACK.checkForInput(OPTIONS_MOUSE_POS):
-                        run = False  
-                        main_menu() 
-
+                    if back_button.checkForInput(mouse_pos):
+                        show_restart = False
+                        # Esto es una muy mala práctica, pero lo dejo aquí para que funcione
+                        import main
+                        main.main_menu()
             pygame.display.update()
-            fps.tick(60)
+            clock.tick(60)
 
 
    
@@ -114,6 +126,14 @@ class Game:
             for ghost in self.ghosts:
                 ghost.update(self.walls)
                 if self.player.rect.colliderect(ghost.rect):
+                    # Detener cualquier sonido de fondo
+                    if self.default_channel:
+                        self.default_channel.stop()
+                    # Sonar death.wav
+                    self.death_sound.play()
+                    # Esperar a que termine death.wav antes de pasar a GAME_OVER
+                    while pygame.mixer.get_busy():
+                        pygame.time.delay(10)
                     self.game_state = GAME_OVER
 
         #actualizar monedas y comprobar coliciones
@@ -122,6 +142,19 @@ class Game:
             if self.player.rect.colliderect(coin.rect):
                 self.coins.remove(coin)
                 self.score += POINTS_PER_COIN
+                # Pausar el sonido default
+                if self.default_channel:
+                    self.default_channel.stop()
+                # Alternar entre pellet1 y pellet2
+                if self.pellet_toggle:
+                    self.pellet1_sound.play()
+                else:
+                    self.pellet2_sound.play()
+                self.pellet_toggle = not self.pellet_toggle
+                # Esperar a que termine el sonido del pellet antes de reanudar default
+                while pygame.mixer.get_busy():
+                    pygame.time.delay(10)
+                self.default_channel = self.default_sound.play(loops=-1)
 
         
 
@@ -153,6 +186,13 @@ class Game:
         pygame.display.flip()
 
     def run(self):
+        # Reproducir levelintro.wav una vez y esperar a que termine
+        self.levelintro_sound.play()
+        while pygame.mixer.get_busy():
+            pygame.time.delay(10)
+        # Cuando termina, reproducir default.wav en bucle
+        self.default_channel = self.default_sound.play(loops=-1)
+
         #bucle principal del juego
         while self.running:
             self.handle_events()

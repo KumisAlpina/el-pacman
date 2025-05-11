@@ -61,6 +61,55 @@ def options():
         pygame.display.update()
         fps.tick(60)
 
+def controls():
+    run = True
+    while run:
+        CONTROLS_MOUSE_POS = pygame.mouse.get_pos()
+        ventana.fill("black")
+
+        CONTROLS_TEXT = get_font(37).render("Pantalla de controles", True, "white")
+        CONTROLS_RECT = CONTROLS_TEXT.get_rect(center=(ancho//2, 50))
+        texto_lineas = [
+            "En este juego puedes controlar tu personaje",
+            "con cualquiera de los dos sistemas de",
+            "dirección más comunes: ya sea",
+            "con las flechas o con WASD.",
+        ]
+
+        # Renderizar y posicionar cada línea de texto
+        y_offset = 120  
+        for linea in texto_lineas:
+            CONTROLS_TEXT2 = get_font(18).render(linea, True, "white")
+            CONTROLS_RECT2 = CONTROLS_TEXT2.get_rect(center=(ancho//2, y_offset))
+            ventana.blit(CONTROLS_TEXT2, CONTROLS_RECT2)
+            y_offset += 40  
+        CONTROLS_RECT2 = CONTROLS_TEXT.get_rect(center=(ancho//2, 120))
+        ventana.blit(CONTROLS_TEXT, CONTROLS_RECT,)
+
+        # --- dibuja la imagen ---
+        controles_img = pygame.image.load("assets/controles.png").convert_alpha()
+        controles_img = pygame.transform.scale(controles_img, (600, 181))  
+        controles_rect = controles_img.get_rect(center=(ancho//2, y_offset + 100))
+        ventana.blit(controles_img, controles_rect)
+        # ----------------------------------------
+
+        CONTROLS_BACK = Button(pos=(ancho//2, 580),
+                            text_input="VOLVER", font=get_font(20), base_color="white", hovering_color="Green")
+
+        CONTROLS_BACK.changeColor(CONTROLS_MOUSE_POS)
+        CONTROLS_BACK.update(ventana)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if CONTROLS_BACK.checkForInput(CONTROLS_MOUSE_POS):
+                    main_menu()
+
+        pygame.display.update()
+        fps.tick(60)
+
 def main_menu():
     # Cargar la imagen del título
     titulo_imagen = pygame.image.load("assets/Titulo.jpg").convert_alpha()
@@ -101,7 +150,7 @@ def main_menu():
                 if PLAY_BUTTON.checkForInput(MENU_MOUSE_POS):
                     play()
                 if OPTIONS_BUTTON.checkForInput(MENU_MOUSE_POS):
-                    options()
+                    controls()
                 if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
                     pygame.quit()
                     sys.exit()

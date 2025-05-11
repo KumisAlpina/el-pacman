@@ -88,10 +88,13 @@ class Ghost:
                 return random.choice([RIGHT, LEFT])
         elif self.ghost_type == 'orange':
             # el fantasma naranja se mueve en sentido horario
-            return (self.direction + 1) % 4
+            return random.randint(0, 3)
         else:
             #el fantasma verde se mueve en sentido antihorario
-            return (self.direction - 1) % 4
+            if self.direction in [RIGHT, LEFT]:
+                return random.choice([UP, DOWN])
+            else:
+                return random.choice([RIGHT, LEFT])
     
     def change_direcction(self, walls):
         """Cambiar la direccion del fantasma segun su tipo"""
@@ -305,16 +308,16 @@ class Player:
         self.dx = 0
         self.dy = 0
 
-        if keys[pygame.K_RIGHT]:
+        if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
             self.dx = PLAYER_SPEED
             self.direction = RIGHT
-        elif keys[pygame.K_LEFT]:
+        elif keys[pygame.K_LEFT] or keys[pygame.K_a]:
             self.dx = -PLAYER_SPEED
             self.direction = LEFT
-        elif keys[pygame.K_UP]:
+        elif keys[pygame.K_UP] or keys[pygame.K_w]:
             self.dy = -PLAYER_SPEED
             self.direction = UP
-        elif keys[pygame.K_DOWN]:
+        elif keys[pygame.K_DOWN]or keys[pygame.K_s]:
             self.dy = PLAYER_SPEED
             self.direction = DOWN
 
