@@ -1,13 +1,13 @@
 import pygame
-import constantes
+import config
 import sys
 from button import Button
 from game import Game
 
 pygame.init()
 
-ancho = constantes.ANCHO_VENTANA
-alto = constantes.ALTO_VENTANA
+ancho = config.SCREEN_WIDTH
+alto = config.SCREEN_HEIGHT
 
 ventana = pygame.display.set_mode((ancho, alto))
 pygame.display.set_caption("PAC-MAN")
@@ -32,17 +32,13 @@ def play():
         except Exception as e:
             print(f"Error: {e}")
             sys.exit(1)
-        finally:
-            #cerrar pygame
-            pygame.quit()
-            sys.exit()
 
 
 def options():
     run = True
     while run:
         OPTIONS_MOUSE_POS = pygame.mouse.get_pos()
-        ventana.fill("white")
+        ventana.fill("black")
 
         OPTIONS_TEXT = get_font(45).render("Pantalla de controles", True, "Black")
         OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(ancho//2, 260))
@@ -73,7 +69,7 @@ def main_menu():
     titulo_rect = titulo_imagen.get_rect(center=(ancho//2, 200))
 
     # Crear el texto PAC-MAN
-    MENU_TEXT = get_font(75).render("PAC-MAN", True, constantes.AMARILLO)
+    MENU_TEXT = get_font(75).render("PAC-MAN", True, config.YELLOW)
     MENU_RECT = MENU_TEXT.get_rect(center=(ancho//2, 200))  # Misma posición que la imagen
 
     ventana.fill("black")
